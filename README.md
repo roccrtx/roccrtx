@@ -2,7 +2,7 @@ This projects contains **ROCC** framework and **RTX** distributed transactional 
 
 **ROCC** framework is aimed to simplify building distributed applications using `RDMA`. 
 
-
+**RTX** is a distributed transaction system atop of ROCC.
 
 - We are working hard to make it easy to use.
 
@@ -35,12 +35,15 @@ int payload = 64;
 char *msg_buf = Rmalloc(payload);  // send buffer
 char *reply_buf = malloc(payload); // reply buffer
 int id = remote_id; // remote server's id
-rpc_handler->send_reqs(rpc_id, 
+rpc_handler->prepare_multi_req(reply_buf,1,cor_id_);
+rpc_handler->broadcast_to(msg_buf,
+                       rpc_id, 
                        payload,
-                       reply_buf,
+                       cor_id_,
+                       RRpc::REQ,
                        &id, // the address of server list to send
-                       1,   // number of servers to send
-                       cor_id_);
+                       1);  // number of servers to send
+                       
 indirect_yield();   // yield to other coroutine
 // when executed, the buffer got the results of remote memory
 Rfree(msg_buffer);      // can free the buffer after that
@@ -49,7 +52,7 @@ free(reply_buffer);
 
 
 
-***
+------
 
 **Dependencies:**
 
@@ -60,7 +63,8 @@ free(reply_buffer);
 - Zmq C++ binding
 - Boost `1.61.0` (Only tested) (will be automatically installed)
 - [LibRDMA](http://ipads.se.sjtu.edu.cn:1312/Windybeing/rdma_lib)
-***
+
+------
 
 **Build:**
 
@@ -72,7 +76,7 @@ free(reply_buffer);
 - `cmake .`
 - `make noccocc`
 
-***
+------
 
 **Run:**
 
@@ -84,7 +88,7 @@ A template config file:`config_template.xml` is presented in the root directory.
 
 A template host file(host.xml) is presented in the scripts, which states for machine's ip/hostname in the cluster.
 
-***
+------
 
 **We will soon make a detailed description and better configuration tools for ROCC**.
 
