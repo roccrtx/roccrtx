@@ -6,7 +6,7 @@ This projects contains **ROCC** framework and **RTX** distributed transactional 
 
 - We are working hard to make it easy to use.
 
-A snippet of how to use nocc framework.
+A snippet of how to use rocc framework.
 
 - For one-sided operations
 
